@@ -6,6 +6,11 @@
       :width='800'
       :height='800'
     />
+    <div
+      class='focus'
+      v-bind:style="{ top: focusY + 'px', left: focusX + 'px' }">
+      {{ focusText }}
+    </div>
     <div>
       Background:
       <button @click='setBackground("white")'>White</button>
@@ -41,6 +46,9 @@ export default {
       timePerFrame: 1,
       stage: true,
       adaptRunning: false,
+      focusText: '?',
+      focusX: 400,  // depends on
+      focusY: 400
     };
   },
   components: {
@@ -64,6 +72,8 @@ export default {
         this.setPattern("CrossesPattern");
         this.setBackground("#0f0");
       }
+      this.focusX = 300 + 25 * (2 * Math.random() - 1);
+      this.focusY = 300 + 25 * (2 * Math.random() - 1);
       this.stage = !this.stage;
       this.countdown -= this.timePerFrame;
       if (this.countdown > 0) {
@@ -87,6 +97,18 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.focus {
+  position: relative;
+  padding: 12px;
+  width: 20px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-size: 20pt;
+  border: solid 1px #000;
+  border-radius: 4px;
+  z-index:20;
 }
 
 h3 {
