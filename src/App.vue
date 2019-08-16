@@ -21,6 +21,8 @@
       Adapt:
       <button @click='setPattern("CirclePattern"); setBackground("#f00")'>Stage 1</button>
       <button @click='setPattern("CrossesPattern"); setBackground("#0f0")'>Stage 2</button>
+      <button @click='adapt()'>Automatically adapt</button>
+      <span>{{ countdown }}</span>
     </div>
   </div>
 </template>
@@ -33,7 +35,12 @@ export default {
   data: function() {
     return {
       background: 'red',
-      pattern: 'CirclePattern'
+      pattern: 'CirclePattern',
+      adaptTime: 120,
+      countdown: 120,
+      timePerFrame: 1,
+      stage: true,
+      adaptRunning: false,
     };
   },
   components: {
@@ -46,6 +53,27 @@ export default {
     'setPattern': function(patternName) {
       this.pattern = patternName;
     },
+    'adapt': function() {
+      if (this.adaptRunning) {
+        return ;
+      }
+      if (this.stage) {
+        this.setPattern("CirclePattern");
+        this.setBackground("#f00");
+      } else {
+        this.setPattern("CrossesPattern");
+        this.setBackground("#0f0");
+      }
+      this.stage = !this.stage;
+      this.countdown -= this.timePerFrame;
+      if (this.countdown > 0) {
+        window.setTimeout(() => this.adapt(), 1000 * this.timePerFrame)
+      } else {
+        this.setBackground("#fff");
+        this.countdown = this.adaptTime;
+        this.adaptRunning = false;
+      }
+    }
   }
 
 }
